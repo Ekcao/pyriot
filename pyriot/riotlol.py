@@ -37,4 +37,7 @@ class RiotLOL():
             field=api_field
         )
 
-        return requests.get(url, params=self.api_key).json()
+        r = requests.get(url, params=self.api_key)
+        r.raise_for_status()
+
+        return r.json()
