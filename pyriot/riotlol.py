@@ -27,12 +27,14 @@ class RiotLOL():
         )
 
     def latest_version(self):
-        url = RiotLOL.api_urls['lol-static-data'].format(
+        return self.make_request('lol-static-data', 'versions')[0]
+
+    def make_request(self, api_url, api_field):
+        url = RiotLOL.api_urls[api_url].format(
             base=self.base_url,
             region=self.region,
-            version=RiotLOL.api_versions['lol-static-data'],
-            field='versions'
+            version=RiotLOL.api_versions[api_url],
+            field=api_field
         )
-        r = requests.get(url, params=self.api_key).json()
 
-        return r[0]
+        return requests.get(url, params=self.api_key).json()
