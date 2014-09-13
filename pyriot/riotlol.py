@@ -21,7 +21,8 @@ class RiotLOL():
 
     def __init__(self, api_key, region='na'):
         self.region = region
-        self.api_key = {'api_key': api_key}
+        self.api_key = api_key
+        self.params = {'api_key': api_key}
         self.base_url = 'https://{region}.api.pvp.net/api/lol'.format(
             region=self.region
         )
@@ -37,7 +38,7 @@ class RiotLOL():
             field=api_field
         )
 
-        r = requests.get(url, params=self.api_key)
+        r = requests.get(url, params=self.params)
         r.raise_for_status()
 
         return r.json()
