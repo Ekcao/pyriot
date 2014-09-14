@@ -22,15 +22,29 @@ class RiotLOL():
     def __init__(self, api_key, region='na'):
         self.region = region
         self.api_key = api_key
-        self.params = {'api_key': api_key}
         self.base_url = 'https://{region}.api.pvp.net/api/lol'.format(
             region=self.region
         )
 
-    def latest_version(self):
-        return self.make_request('lol-static-data', 'versions')[0]
+    def champion_list(self, champ_data=None):
+        return self.make_request(
+            'lol-static-data', 'champion',
+            champData=champ_data
+            )['data']
 
-    def make_request(self, api_url, api_field):
+    def version(self):
+        return self.make_request('lol-static-data', 'versions')
+
+    def latest_version(self):
+        return self.version()[0]
+
+    def make_request(self, api_url, api_field, **kwargs):
+        args = {'api_key': self.api_key}
+
+        for kw in kwargs:
+            if kwargs[kw] is not None:
+                args[kw] = kwargs[kw]
+
         url = RiotLOL.api_urls[api_url].format(
             base=self.base_url,
             region=self.region,
@@ -38,7 +52,7 @@ class RiotLOL():
             field=api_field
         )
 
-        r = requests.get(url, params=self.params)
+        r = requests.get(url, params=args)
         r.raise_for_status()
 
         return r.json()
