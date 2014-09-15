@@ -7,16 +7,12 @@ class RiotLOL():
         'champion': 1.2,
         'game': 1.3,
         'league': 2.5,
-        'lol-static-data': 1.2,
+        'static-data': 1.2,
         'match': 2.2,
         'matchhistory': 2.2,
         'stats': 1.3,
         'summoner': 1.4,
         'team': 2.4
-    }
-
-    api_urls = {
-        'lol-static-data': '{base}/static-data/{region}/v{version}/{field}'
     }
 
     def __init__(self, api_key, region='na'):
@@ -25,17 +21,38 @@ class RiotLOL():
         self.base_url = 'https://{region}.api.pvp.net/api/lol'.format(
             region=self.region
         )
+        self.url = '{base}/{category}/{region}/v{version}/{field}'
 
     def champion_list(self, champ_data=None):
+        """Retrieves champion list.
+
+        Keyword arguments:
+        champ_data -- tags for additional data (default None)
+        """
         return self.make_request(
-            'lol-static-data', 'champion',
+            'static-data',
+            'champion',
             champData=champ_data
-            )['data']
+        )['data']
+
+    def champion(self, id, champ_data=None):
+        """Retrieves a champion by its id.
+
+        Keyword arguments:
+        champ_data -- tags for additional data (default None)
+        """
+        return self.make_request(
+            'static-data',
+            'champion/{}'.format(id),
+            champData=champ_data
+        )
 
     def version(self):
-        return self.make_request('lol-static-data', 'versions')
+        """Retrieves version data."""
+        return self.make_request('static-data', 'versions')
 
     def latest_version(self):
+        """Retrieves most recent version."""
         return self.version()[0]
 
     def make_request(self, api_url, api_field, **kwargs):
@@ -45,8 +62,9 @@ class RiotLOL():
             if kwargs[kw] is not None:
                 args[kw] = kwargs[kw]
 
-        url = RiotLOL.api_urls[api_url].format(
+        url = self.url.format(
             base=self.base_url,
+            category=api_url,
             region=self.region,
             version=RiotLOL.api_versions[api_url],
             field=api_field
