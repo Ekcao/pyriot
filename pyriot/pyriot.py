@@ -13,10 +13,8 @@ def main():
         f = open(file_name, 'w')
         api_key = input("Enter Riot Games API key: ")
 
-        info = {'api_key': api_key,
-                'version': riot.latest_version()
-                }
-        json.dump(info, f)
+        info = {'api_key': api_key}
+        json.dump(info, f, indent=4)
 
     riot = riotlol.RiotLOL(info['api_key'])
     f.close()
