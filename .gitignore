@@ -55,5 +55,5 @@ docs/_build/
 target/
 
 
-pyriot/info.json
+pyriot/*.json
 .idea/

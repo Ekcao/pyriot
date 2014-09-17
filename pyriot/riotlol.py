@@ -33,7 +33,7 @@ class RiotLOL():
             'static-data',
             'champion',
             champData=champ_data
-        )['data']
+        )
 
     def champion(self, id, champ_data=None):
         """Retrieves a champion by its id.
