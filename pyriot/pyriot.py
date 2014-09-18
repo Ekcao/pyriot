@@ -13,6 +13,12 @@ def save_champs_to_file(riot, file):
 
 
 def get_champions(riot):
+    '''Checks directory for 'champs.json',
+    a json file containing the list of champion data.
+
+    If the file exists, the version is checked and updated if needed.
+    Otherwise the file is created.
+    '''
     champs_json = 'champs.json'
     current_patch = riot.latest_version()
 
