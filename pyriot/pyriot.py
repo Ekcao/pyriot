@@ -1,5 +1,6 @@
 import os.path
 import json
+import argparse
 import riotlol
 
 
@@ -35,6 +36,11 @@ def get_champions(riot):
     return champs['data']
 
 
+def parse():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("champ", help="display a champion's info")
+    return parser.parse_args()
+
 def main():
     info_json = 'info.json'
     if os.path.isfile(info_json):
@@ -48,6 +54,10 @@ def main():
 
     riot = riotlol.RiotLOL(info['api_key'])
     champs = get_champions(riot)
+    args = parse()
+
+    champ_title = champs[args.champ.capitalize()]['title']
+    print(champ_title)
 
 if __name__ == '__main__':
     main()
