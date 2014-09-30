@@ -38,7 +38,13 @@ def get_champions(riot):
 
 def parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument("champ", help="display a champion's info")
+    parser.add_argument('champ', help='display a champion\'s info')
+    parser.add_argument(
+        'spell',
+        help='spell (pqwer by default)',
+        nargs='*',
+        default='pqwer'
+    )
     return parser.parse_args()
 
 def main():
@@ -56,8 +62,15 @@ def main():
     champs = get_champions(riot)
     args = parse()
 
-    champ_title = champs[args.champ.capitalize()]['title']
-    print(champ_title)
+    champ_name = args.champ.capitalize()
+    if champ_name in champs.keys():
+        ch = champs[champ_name]
+        for i in args.spell:
+            if i.lower() == 'p':
+                print(ch['passive']['sanitizedDescription'])
+            else:
+                print('Not found')
+
 
 if __name__ == '__main__':
     main()
