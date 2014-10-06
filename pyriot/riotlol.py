@@ -39,7 +39,7 @@ class RiotLOL():
             if os.path.isfile(file_name):
                 with open(file_name, 'r+') as f:
                     champs = json.load(f)
-                    if champs['version'] != current_patch:
+                    if champs['version'] != str(current_patch):
                         f.seek(0)
                         champs = self.save_champs(f)
             else:
@@ -72,7 +72,7 @@ class RiotLOL():
 
     def latest_version(self):
         """Retrieves most recent version."""
-        return self.version()[0]
+        return self.version()[1]
 
     def make_request(self, api_url, api_field, **kwargs):
         args = {'api_key': self.api_key}
@@ -80,7 +80,6 @@ class RiotLOL():
         for kw in kwargs:
             if kwargs[kw] is not None:
                 args[kw] = kwargs[kw]
-
         url = self.url.format(
             base=self.base_url,
             category=api_url,
