@@ -1,4 +1,6 @@
 import requests
+import os.path
+import json
 
 
 class RiotLOL():
@@ -23,17 +25,34 @@ class RiotLOL():
         )
         self.url = '{base}/{category}/{region}/v{version}/{field}'
 
-    def champion_list(self, champ_data=None):
+    def champion_list(self, from_file=False, champ_data=None):
         """Retrieves champion list.
 
         Keyword arguments:
         champ_data -- tags for additional data (default None)
         """
-        return self.make_request(
-            'static-data',
-            'champion',
-            champData=champ_data
-        )
+
+        if from_file:
+            file_name = 'champs.json'
+            current_patch = self.latest_version()
+
+            if os.path.isfile(file_name):
+                with open(file_name, 'r+') as f:
+                    champs = json.load(f)
+                    if champs['version'] != current_patch:
+                        f.seek(0)
+                        champs = self.save_champs(f)
+            else:
+                with open(file_name, 'w') as f:
+                    champs = self.save_champs(f)
+
+            return champs
+        else:
+            return self.make_request(
+                'static-data',
+                'champion',
+                champData=champ_data
+            )
 
     def champion(self, id, champ_data=None):
         """Retrieves a champion by its id.
@@ -74,3 +93,11 @@ class RiotLOL():
         r.raise_for_status()
 
         return r.json()
+
+    def save_champs(self, file):
+        champs = self.champion_list(champ_data='all')
+        json.dump(champs, file, sort_keys=True,
+                  indent=4, separators=(',', ': ')
+                  )
+
+        return champs
