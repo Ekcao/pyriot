@@ -47,6 +47,7 @@ def parse():
     )
     return parser.parse_args()
 
+
 def main():
     info_json = 'info.json'
     if os.path.isfile(info_json):
@@ -68,9 +69,9 @@ def main():
         for i in args.spell:
             if i.lower() == 'p':
                 print(ch['passive']['sanitizedDescription'])
+            elif i.lower() == 'q':
+                print(ch['spells'][0]['sanitizedTooltip'])
             else:
-                print('Not found')
-
-
+                print("Not found")
 if __name__ == '__main__':
     main()
