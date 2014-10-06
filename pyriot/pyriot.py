@@ -26,21 +26,20 @@ def spell_tooltip(champ, spell_string):
     }
 
     for i in range(1, len(spell_string['effectBurn'])):
-        pattern = '{{ e' + str(i) + ' }}'
         tooltip = tooltip.replace(
-            pattern,
+            '{{ e' + str(i) + ' }}',
             spell_string['effectBurn'][i]
         )
 
     try:
-        ratio_type = str()
-        spell_link = spell_string['vars'][0]['link']
-        ratio_type = damage_type[spell_link]
+        for i in range(len(spell_string['vars'])):
+            spell_link = spell_string['vars'][i]['link']
+            ratio_type = damage_type[spell_link]
 
-        tooltip = tooltip.replace(
-            '{{ a1 }}',
-            str(spell_string['vars'][0]['coeff'][0]) + ratio_type
-        )
+            tooltip = tooltip.replace(
+                '{{ a' + str(i + 1) + ' }}',
+                str(spell_string['vars'][i]['coeff'][0]) + ratio_type
+            )
     except KeyError:
         pass
 
