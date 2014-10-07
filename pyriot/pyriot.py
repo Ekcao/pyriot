@@ -16,7 +16,19 @@ def parse():
     return parser.parse_args()
 
 
-def spell_tooltip(champ, spell):
+def print_spell(spell):
+    fmt = '\n{0}  RANGE: {1}  COST: {2}  COOLDOWN: {3}'
+    description = fmt.format(
+        spell['name'],
+        spell['rangeBurn'],
+        spell['costBurn'],
+        spell['cooldownBurn']
+    )
+    print(description)
+    print(spell_tooltip(spell))
+
+
+def spell_tooltip(spell):
     tooltip = spell['sanitizedTooltip']
 
     damage_type = {
@@ -70,14 +82,17 @@ def main():
 
         ability = {
             'p': ch['passive']['sanitizedDescription'],
-            'q': spell_tooltip(ch, ch['spells'][0]),
-            'w': spell_tooltip(ch, ch['spells'][1]),
-            'e': spell_tooltip(ch, ch['spells'][2]),
-            'r': spell_tooltip(ch, ch['spells'][3])
+            'q': ch['spells'][0],
+            'w': ch['spells'][1],
+            'e': ch['spells'][2],
+            'r': ch['spells'][3]
         }
 
         for i in args.spell:
-            print('\n', ability[i.lower()])
+            if i == 'p':
+                print(ability['p'])
+            else:
+                print_spell(ability[i])
     else:
         print('Champion name not found.')
 
