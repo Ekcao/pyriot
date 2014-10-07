@@ -8,9 +8,10 @@ Requires [Riot Games API key](https://developer.riotgames.com/)
 
 Uses Python 3
 
-Requires 'requests' module
+Requires 'requests' and 'argparse' module
 
     pip install requests
+    pip install argparse
 
 **Examples**
 
