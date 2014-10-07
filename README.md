@@ -2,6 +2,8 @@ pyriot
 ======
 **Usage**
 
+Requires [Riot Games API key](https://developer.riotgames.com/) 
+
 Uses Python 3
 Requires 'requests' module
 
