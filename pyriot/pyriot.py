@@ -16,8 +16,8 @@ def parse():
     return parser.parse_args()
 
 
-def spell_tooltip(champ, spell_string):
-    tooltip = spell_string['sanitizedTooltip']
+def spell_tooltip(champ, spell):
+    tooltip = spell['sanitizedTooltip']
 
     damage_type = {
         'spelldamage': ' AP',
@@ -25,20 +25,23 @@ def spell_tooltip(champ, spell_string):
         'attackdamage': ' AD'
     }
 
-    for i in range(1, len(spell_string['effectBurn'])):
+    # Replace ei with effect burns (e.g. 50/60/70/80/90)
+    for i in range(1, len(spell['effectBurn'])):
         tooltip = tooltip.replace(
             '{{ e' + str(i) + ' }}',
-            spell_string['effectBurn'][i]
+            spell['effectBurn'][i]
         )
 
+    # Replace ai with spell coefficient and damage type
+    # Some spells have no ratio
     try:
-        for i in range(len(spell_string['vars'])):
-            spell_link = spell_string['vars'][i]['link']
-            ratio_type = damage_type[spell_link]
+        for i in range(len(spell['vars'])):
+            link = spell['vars'][i]['link']
+            ratio_type = damage_type[link]
 
             tooltip = tooltip.replace(
                 '{{ a' + str(i + 1) + ' }}',
-                str(spell_string['vars'][i]['coeff'][0]) + ratio_type
+                str(spell['vars'][i]['coeff'][0]) + ratio_type
             )
     except KeyError:
         pass
@@ -47,7 +50,6 @@ def spell_tooltip(champ, spell_string):
 
 
 def main():
-    print('')
     info_json = 'info.json'
     if os.path.isfile(info_json):
         with open(info_json, 'r') as f:
@@ -62,28 +64,22 @@ def main():
     champs = riot.champion_list(True, champ_data='all')
     args = parse()
 
-    champ_name = args.champ.capitalize()
-    if champ_name in champs['data'].keys():
-        ch = champs['data'][champ_name]
-        for i in args.spell:
-            if i.lower() == 'p':
-                print(ch['passive']['sanitizedDescription'])
-                print()
-            elif i.lower() == 'q':
-                print(spell_tooltip(ch, ch['spells'][0]))
-                print()
-            elif i.lower() == 'w':
-                print(spell_tooltip(ch, ch['spells'][1]))
-                print()
-            elif i.lower() == 'e':
-                print(spell_tooltip(ch, ch['spells'][2]))
-                print()
-            elif i.lower() == 'r':
-                print(spell_tooltip(ch, ch['spells'][3]))
-                print()
-            else:
-                print("\nNot found")
+    name = args.champ.capitalize()
+    if name in champs['data'].keys():
+        ch = champs['data'][name]
 
+        ability = {
+            'p': ch['passive']['sanitizedDescription'],
+            'q': spell_tooltip(ch, ch['spells'][0]),
+            'w': spell_tooltip(ch, ch['spells'][1]),
+            'e': spell_tooltip(ch, ch['spells'][2]),
+            'r': spell_tooltip(ch, ch['spells'][3])
+        }
+
+        for i in args.spell:
+            print('\n', ability[i.lower()])
+    else:
+        print('Champion name not found.')
 
 if __name__ == '__main__':
     main()
