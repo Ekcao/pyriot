@@ -1,5 +1,6 @@
 pyriot
 ======
+**THIS THING ISN'T COMPLETELY DONE**
 **Usage**
 
 Requires [Riot Games API key](https://developer.riotgames.com/) 
