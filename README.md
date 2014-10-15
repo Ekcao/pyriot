@@ -1,6 +1,5 @@
 pyriot
 ======
-**THIS THING ISN'T COMPLETELY DONE**
 
 **Usage**
 
