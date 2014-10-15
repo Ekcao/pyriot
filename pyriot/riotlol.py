@@ -32,6 +32,7 @@ class RiotLOL():
         champ_data -- tags for additional data (default None)
         """
 
+        # TODO: Move file io to another method
         if from_file:
             file_name = 'champs.json'
             current_patch = self.latest_version()
@@ -72,7 +73,7 @@ class RiotLOL():
 
     def latest_version(self):
         """Retrieves most recent version."""
-        return self.version()[1]
+        return self.version()[0]
 
     def make_request(self, api_url, api_field, **kwargs):
         args = {'api_key': self.api_key}

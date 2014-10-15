@@ -1,3 +1,4 @@
+import colorama
 import os.path
 import json
 import argparse
@@ -20,8 +21,10 @@ def print_spell(spell):
     fmt = '\n{0}  RANGE: {1}  COST: {2}  COOLDOWN: {3}'
     description = fmt.format(
         spell['name'],
-        spell['rangeBurn'],
-        spell['costBurn'],
+        spell['rangeBurn'].capitalize(),
+        spell['resource'].replace(
+            '{{ cost }}', spell['costBurn']
+        ),
         spell['cooldownBurn']
     )
     print(description)
@@ -55,6 +58,7 @@ def spell_tooltip(spell):
                 '{{ a' + str(i + 1) + ' }}',
                 str(spell['vars'][i]['coeff'][0]) + ratio_type
             )
+
     except KeyError:
         pass
 
@@ -81,7 +85,7 @@ def main():
         ch = champs['data'][name]
 
         ability = {
-            'p': ch['passive']['sanitizedDescription'],
+            'p': ch['passive'],
             'q': ch['spells'][0],
             'w': ch['spells'][1],
             'e': ch['spells'][2],
@@ -90,7 +94,10 @@ def main():
 
         for i in args.spell:
             if i == 'p':
-                print(ability['p'])
+                print('{0}\n{1}'.format(
+                    ability[i]['name'],
+                    ability[i]['sanitizedDescription']
+                ))
             else:
                 print_spell(ability[i])
     else:
