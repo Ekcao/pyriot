@@ -1,4 +1,3 @@
-import colorama
 import os.path
 import json
 import argparse
@@ -18,7 +17,7 @@ def parse():
 
 
 def print_spell(spell):
-    fmt = '\n{0}  RANGE: {1}  COST: {2}  COOLDOWN: {3}'
+    fmt = '\n{0}\nRange: {1}  Cost: {2}  Cooldown: {3}'
     description = fmt.format(
         spell['name'],
         spell['rangeBurn'].capitalize(),
@@ -94,12 +93,14 @@ def main():
 
         for i in args.spell:
             if i == 'p':
-                print('{0}\n{1}'.format(
+                print('\n{0}\n{1}'.format(
                     ability[i]['name'],
                     ability[i]['sanitizedDescription']
                 ))
             else:
                 print_spell(ability[i])
+
+            print('\n_______________________________________________________')
     else:
         print('Champion name not found.')
 
