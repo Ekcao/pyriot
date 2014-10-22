@@ -30,6 +30,27 @@ def print_spell(spell):
     print(spell_tooltip(spell))
 
 
+def coefficient(spell):
+    coeffs = {}
+
+    damage_type = {
+        'spelldamage': ' AP',
+        'bonusattackdamage': ' bonus AD',
+        'attackdamage': ' AD'
+    }
+
+    try:
+        for i in range(len(spell['vars'])):
+            coeff = spell['vars'][i]['link']
+            k = spell['vars'][i]['key']
+            coeff_type = damage_type[coeff]
+            coeffs[k] = str(spell['vars'][i]['coeff'][0]) + coeff_type
+    except KeyError:
+        pass
+
+    return coeffs
+
+
 def spell_tooltip(spell):
     tooltip = spell['sanitizedTooltip']
 
@@ -46,18 +67,19 @@ def spell_tooltip(spell):
             spell['effectBurn'][i]
         )
 
-    # Replace ai with spell coefficient and damage type
-    # Some spells have no ratio
+    coeffs = coefficient(spell)
+
+    if not coeffs:
+        return tooltip
+
     try:
         for i in range(len(spell['vars'])):
-            link = spell['vars'][i]['link']
-            ratio_type = damage_type[link]
+            k = spell['vars'][i]['key']
 
             tooltip = tooltip.replace(
-                '{{ a' + str(i + 1) + ' }}',
-                str(spell['vars'][i]['coeff'][0]) + ratio_type
+                '{{ ' + k + ' }}',
+                coeffs[k]
             )
-
     except KeyError:
         pass
 
