@@ -1,5 +1,4 @@
 class Spell():
-
     def __init__(self, spell):
         self.spell = spell
         self.vars = spell.get('vars')
@@ -28,10 +27,8 @@ class Spell():
 
         # Replace ei with effect burns (e.g. 50/60/70/80/90)
         for i in range(1, len(self.spell['effectBurn'])):
-            self.tooltip = self.tooltip.replace(
-                '{{ e' + str(i) + ' }}',
-                self.spell['effectBurn'][i]
-            )
+            self.tooltip = self.tooltip.replace('{{ e' + str(i) + ' }}',
+                                                self.spell['effectBurn'][i])
 
         if not self.coeffs:
             return self.tooltip
@@ -40,10 +37,8 @@ class Spell():
             for i in range(len(self.vars)):
                 k = self.vars[i]['key']
 
-                self.tooltip = self.tooltip.replace(
-                    '{{ ' + k + ' }}',
-                    self.coeffs[k]
-                )
+                self.tooltip = self.tooltip.replace('{{ ' + k + ' }}',
+                                                    self.coeffs[k])
         except KeyError:
             pass
 
@@ -51,13 +46,10 @@ class Spell():
 
     def __str__(self):
         s = '\n{0}\nRange: {1} | Cost: {2} | Cooldown: {3}'.format(
-            self.spell['name'],
-            self.spell['rangeBurn'].capitalize(),
-            self.spell['resource'].replace(
-                '{{ cost }}', self.spell['costBurn']
-            ),
-            self.spell['cooldownBurn']
-        )
+            self.spell['name'], self.spell['rangeBurn'].capitalize(),
+            self.spell['resource'].replace('{{ cost }}',
+                                           self.spell['costBurn']),
+            self.spell['cooldownBurn'])
 
         s += '\n' + self.tooltip
         return s
